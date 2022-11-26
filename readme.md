@@ -13,9 +13,10 @@ Most emscripten headers can be @cImported without issues, however zig bindings  
 |console.h          | ☑️    | ⚠️ | basic log functions are ok. variadic logf untested: could have issues due to removed `__attribute__((__format__(printf, 1, 2)))` |
 |dom_pk_codes.h     | ❌    | ❌ |                                  |
 |emmalloc.h         | ☑️    | ☑️ |                                  |
+|emscripten.h       | 🛠️    | 🛠️   | Some functions not done. Namespaced in root as `core`.         |
 |em_asm.h           | ❌    | ❌ |                                  |
 |em_js.h            | ❌    | ❌ |                                  |
-|em_macros.h        | ❌    | ❌ |                                  |
+|em_macros.h        | ⛔    | ⛔ | Don't see how to implement c macro magic in zig.                                    |
 |em_math.h          | ❌    | ❌ |                                  |
 |em_types.h         | ☑️    | ❌ |                                  |
 |eventloop.h        | ☑️    | ❌ |                                  |
