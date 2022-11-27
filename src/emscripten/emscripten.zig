@@ -1,21 +1,26 @@
-// NOTE: here are only exports
-// #include "em_asm.h"
-// #include "em_macros.h"
-// #include "em_types.h"
-// #include "em_js.h"
-// #include "wget.h"
-// #include "version.h"
+// ===============================================================================================
+// Zig interface
+// ===============================================================================================
 const em_types = @import("em_types.zig");
 const CallbackFunc = em_types.EmCallbackFunc;
 const ArgCallbackFunc = em_types.EmArgCallbackFunc;
+
+pub const SocketCallback = *const fn (fd: i32, user_data: ?*anyopaque) void;
+pub const SocketErrorCallback = *const fn (fd: i32, err: i32, msg: [*:0]const u8, user_data: ?*anyopaque) void;
+
+pub const EmTiming = enum(u32) {
+    settimeout = 0, // EM_TIMING_SETTIMEOUT
+    timing_raf = 1, // EM_TIMING_RAF
+    setimmediate = 2, // EM_TIMING_SETIMMEDIATE
+};
 
 pub const runScript = emscripten_run_script;
 pub const runScriptInt = emscripten_run_script_int;
 pub const runScriptString = emscripten_run_script_string;
 pub const asyncRunScript = emscripten_async_run_script;
 pub const loadScript = emscripten_async_load_script;
-pub const setMainLoop = emscripten_set_main_loop;
 
+pub const setMainLoop = emscripten_set_main_loop;
 pub const setMainLoopTiming = emscripten_set_main_loop_timing;
 pub const getMainLoopTiming = emscripten_get_main_loop_timing;
 pub const setMainLoopArg = emscripten_set_main_loop_arg;
@@ -23,8 +28,6 @@ pub const pauseMainLoop = emscripten_pause_main_loop;
 pub const resumeMainLoop = emscripten_resume_main_loop;
 pub const cancelMainLoop = emscripten_cancel_main_loop;
 
-const SocketCallback = *const fn (fd: i32, user_data: ?*anyopaque) void;
-const SocketErrorCallback = *const fn (fd: i32, err: i32, msg: [*:0]const u8, user_data: ?*anyopaque) void;
 pub const setSocketErrorCallback = emscripten_set_socket_error_callback;
 pub const setSocketOpenCallback = emscripten_set_socket_open_callback;
 pub const setSocketListenCallback = emscripten_set_socket_listen_callback;
@@ -85,9 +88,19 @@ pub const throwString = emscripten_throw_string;
 
 pub const sleep = emscripten_sleep;
 
-//
+
+// ===============================================================================================
 // Extern
-//
+// ===============================================================================================
+
+
+// #include "em_asm.h"
+// #include "em_macros.h"
+// #include "em_types.h"
+// #include "em_js.h"
+// #include "wget.h"
+// #include "version.h"
+
 extern fn emscripten_run_script(script: [*:0]const u8) void;
 extern fn emscripten_run_script_int(script: [*:0]const u8) i32;
 extern fn emscripten_run_script_string(script: [*:0]const u8) [*:0]const u8;
@@ -95,12 +108,6 @@ extern fn emscripten_async_run_script(script: [*:0]const u8, millis: i32) void;
 extern fn emscripten_async_load_script(script: [*:0]const u8, onload: CallbackFunc, onerror: CallbackFunc) void;
 
 extern fn emscripten_set_main_loop(func: CallbackFunc, fps: i32, simulate_infinite_loop: i32) void;
-
-pub const EmTiming = enum(u32) {
-    settimeout = 0, // EM_TIMING_SETTIMEOUT
-    timing_raf = 1, // EM_TIMING_RAF
-    setimmediate = 2, // EM_TIMING_SETIMMEDIATE
-};
 
 extern fn emscripten_set_main_loop_timing(mode: i32, value: i32) c_int;
 extern fn emscripten_get_main_loop_timing(mode: *i32, value: *i32) void;

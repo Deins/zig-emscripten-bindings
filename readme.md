@@ -5,47 +5,48 @@ As well as some utilites for integration with zig std library, such as allocator
 Most emscripten headers can be @cImported without issues, however zig bindings  purpose is to allow nicer integration as well as providing better type-safety.
 
 ## Header status  `src/emscripten/*`:
+matching version: `emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.26 (8eaf19f1c6a9a1b0cd0f9a91657366829e34ae5c)`
 
 | header            | rewritten  | tested | notes                    |
 |-------------------|:----------:|:------:|----------------------------|
-|atomic.h           | ❌    | ❌ |                                  |
-|bind.h             | ❌    | ❌ |                                  |
-|console.h          | ☑️    | ⚠️ | basic log functions are ok. variadic logf untested: could have issues due to removed `__attribute__((__format__(printf, 1, 2)))` |
-|dom_pk_codes.h     | ❌    | ❌ |                                  |
-|emmalloc.h         | ☑️    | ☑️ |                                  |
-|emscripten.h       | 🛠️    | 🛠️   | Some functions not done. Namespaced in root as `core`.         |
-|em_asm.h           | ❌    | ❌ |                                  |
-|em_js.h            | ❌    | ❌ |                                  |
+|atomic.h           | ✖    | ✖ |                                  |
+|bind.h             | ✖    | ✖ |                                  |
+|console.h          | ✔️    | ⚠️ | basic log functions are ok. variadic logf untested: could have issues due to removed `__attribute__((__format__(printf, 1, 2)))` |
+|dom_pk_codes.h     | ✖    | ✖ |                                  |
+|emmalloc.h         | ✔️    | ✔️ |                                  |
+|emscripten.h       | 🛠️    | 🛠️   | Some functions not done.         |
+|em_asm.h           | ✖    | ✖ |                                  |
+|em_js.h            | ✖    | ✖ |                                  |
 |em_macros.h        | ⛔    | ⛔ | Don't see how to implement c macro magic in zig.                                    |
-|em_math.h          | ❌    | ❌ |                                  |
-|em_types.h         | ☑️    | ❌ |                                  |
-|eventloop.h        | ☑️    | ❌ |                                  |
-|exports.h          | ❌    | ❌ |                                  |
-|fetch.h            | 🛠️    | ❌ |                                  |
-|fiber.h            | ❌    | ❌ |                                  |
-|heap.h             | ☑️    | ❌ |                                  |
-|html5.h            | ❌    | ❌ |                                  |
-|html5_webgl.h      | ❌    | ❌ |                                  |
-|html5_webgpu.h     | ❌    | ❌ |                                  |
-|key_codes.h        | ❌    | ❌ |                                  |
-|posix_socket.h     | ❌    | ❌ |                                  |
-|proxying.h         | ❌    | ❌ |                                  |
-|stack.h            | ❌    | ❌ |                                  |
-|threading.h        | ❌    | ❌ |                                  |
-|trace.h            | ❌    | ❌ |                                  |
-|val.h              | ❌    | ❌ |                                  |
-|version.h          | ❌    | ❌ |                                  |
-|wasmfs.h           | ❌    | ❌ |                                  |
-|wasm_worker        | ❌    | ❌ |                                  |
-|websocket.h        | ❌    | ❌ |                                  |
-|wget.h             | ❌    | ❌ |                                  |
-|wire.h             | ❌    | ❌ |                                  |
+|em_math.h          | ✖    | ✖ |                                  |
+|em_types.h         | ✔️    | ✖ |                                  |
+|eventloop.h        | ✔️    | ✖ |                                  |
+|exports.h          | ✖    | ✖ |                                  |
+|fetch.h            | 🛠️    | ✖ |                                  |
+|fiber.h            | ✖    | ✖ |                                  |
+|heap.h             | ✔️    | ✖ |                                  |
+|html5.h            | 🛠️    | ✖ | Externs rewritten. Missing zig-ified names.                                  |
+|html5_webgl.h      | ✖    | ✖ |                                  |
+|html5_webgpu.h     | -    | - | Nothing useful in this header       |
+|key_codes.h        | ✖    | ✖ |                                  |
+|posix_socket.h     | ✖    | ✖ |                                  |
+|proxying.h         | ✖    | ✖ |                                  |
+|stack.h            | ✖    | ✖ |                                  |
+|threading.h        | ✖    | ✖ |                                  |
+|trace.h            | ✖    | ✖ |                                  |
+|val.h              | ✖    | ✖ |                                  |
+|version.h          | ✖    | ✖ |                                  |
+|wasmfs.h           | ✖    | ✖ |                                  |
+|wasm_worker        | ✖    | ✖ |                                  |
+|websocket.h        | ✖    | ✖ |                                  |
+|wget.h             | ✖    | ✖ |                                  |
+|wire.h             | ✖    | ✖ |                                  |
 
 # Zig specific bindings
 
 * Allocators (file `src/allocator.zig`):
-    * ☑️ BuiltinAllocator **(doesn't have realloc)**
-    * ☑️ EmMalloc allocator
+    * ✔️ BuiltinAllocator **(doesn't have realloc)**
+    * ✔️ EmMalloc allocator
 
 ## Usage
 
