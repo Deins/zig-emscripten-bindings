@@ -7,40 +7,40 @@ Most emscripten headers can be @cImported without issues, however zig bindings  
 ## Header status  `src/emscripten/*`:
 matching version: `emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.26 (8eaf19f1c6a9a1b0cd0f9a91657366829e34ae5c)`
 
-| header            | rewritten  | tested | notes                    |
-|-------------------|:----------:|:------:|----------------------------|
-|atomic.h           | ✖    | ✖ |                                  |
-|bind.h             | ✖    | ✖ |                                  |
-|console.h          | ✔️    | ⚠️ | basic log functions are ok. variadic logf untested: could have issues due to removed `__attribute__((__format__(printf, 1, 2)))` |
-|dom_pk_codes.h     | ✖    | ✖ |                                  |
-|emmalloc.h         | ✔️    | ✔️ |                                  |
-|emscripten.h       | 🛠️    | 🛠️   | Some functions not done.         |
-|em_asm.h           | ✖    | ✖ |                                  |
-|em_js.h            | ✖    | ✖ |                                  |
-|em_macros.h        | ⛔    | ⛔ | Don't see how to implement c macro magic in zig.                                    |
-|em_math.h          | ✖    | ✖ |                                  |
-|em_types.h         | ✔️    | ✖ |                                  |
-|eventloop.h        | ✔️    | ✖ |                                  |
-|exports.h          | ✖    | ✖ |                                  |
-|fetch.h            | 🛠️    | ✖ |                                  |
-|fiber.h            | ✖    | ✖ |                                  |
-|heap.h             | ✔️    | ✖ |                                  |
-|html5.h            | 🛠️    | ✖ | Externs rewritten. Missing zig-ified names.                                  |
-|html5_webgl.h      | ✖    | ✖ |                                  |
-|html5_webgpu.h     | -    | - | Nothing useful in this header       |
-|key_codes.h        | ✖    | ✖ |                                  |
-|posix_socket.h     | ✖    | ✖ |                                  |
-|proxying.h         | ✖    | ✖ |                                  |
-|stack.h            | ✖    | ✖ |                                  |
-|threading.h        | ✖    | ✖ |                                  |
-|trace.h            | ✖    | ✖ |                                  |
-|val.h              | ✖    | ✖ |                                  |
-|version.h          | ✖    | ✖ |                                  |
-|wasmfs.h           | ✖    | ✖ |                                  |
-|wasm_worker        | ✖    | ✖ |                                  |
-|websocket.h        | ✖    | ✖ |                                  |
-|wget.h             | ✖    | ✖ |                                  |
-|wire.h             | ✖    | ✖ |                                  |
+| header            | rewritten  | notes                    |
+|-------------------|:----------:|----------------------------|
+|atomic.h           | ✖    |                                  |
+|bind.h             | ✖    |                                  |
+|console.h          | ✔️   |                                  |
+|dom_pk_codes.h     | ✖    |                                  |
+|emmalloc.h         | ✔️   |                                  |
+|emscripten.h       | 🛠️   | Some functions not done.         |
+|em_asm.h           | ✖    |                                  |
+|em_js.h            | ✖    |                                  |
+|em_macros.h        | ⛔   | Don't see how to implement c macro magic in zig.                                    |
+|em_math.h          | ✖    |                                  |
+|em_types.h         | ✔️   |                                  |
+|eventloop.h        | ✔️   |                                  |
+|exports.h          | ✖    |                                  |
+|fetch.h            | 🛠️   |                                  |
+|fiber.h            | ✖    |                                  |
+|heap.h             | ✔️   |                                  |
+|html5.h            | 🛠️   | Externs rewritten. Missing zig-ified names.                                  |
+|html5_webgl.h      | ✖    |                                  |
+|html5_webgpu.h     | -    | Nothing useful in this header     |
+|key_codes.h        | ✖    |                                  |
+|posix_socket.h     | ✖    |                                  |
+|proxying.h         | ✖    |                                  |
+|stack.h            | ✖    |                                  |
+|threading.h        | ✖    |                                  |
+|trace.h            | ✖    |                                  |
+|val.h              | ✖    |                                  |
+|version.h          | ✖    |                                  |
+|wasmfs.h           | ✖    |                                  |
+|wasm_worker        | ✖    |                                  |
+|websocket.h        | ✖    |                                  |
+|wget.h             | ✖    |                                  |
+|wire.h             | ✖    |                                  |
 
 # Zig specific bindings
 
