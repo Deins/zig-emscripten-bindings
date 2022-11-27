@@ -9,38 +9,37 @@ matching version: `emcc (Emscripten gcc/clang-like replacement + linker emulatin
 
 | header            | rewritten  | notes                    |
 |-------------------|:----------:|----------------------------|
-|atomic.h           | ✖    |                                  |
-|bind.h             | ✖    |                                  |
+|atomic.h           | -    |                                  |
+|bind.h             | -    |                                  |
 |console.h          | ✔️   |                                  |
-|dom_pk_codes.h     | ✖    |                                  |
+|dom_pk_codes.h     | -    |                                  |
 |emmalloc.h         | ✔️   |                                  |
-|emscripten.h       | 🛠️   | Some functions not done.         |
-|em_asm.h           | ✖    |                                  |
-|em_js.h            | ✖    |                                  |
-|em_macros.h        | ⛔   | Don't see how to implement c macro magic in zig.                                    |
-|em_math.h          | ✖    |                                  |
+|emscripten.h       | 🛠️   | some functions skipped.         |
+|em_asm.h           | -    |                                  |
+|em_js.h            | -    |                                  |
+|em_macros.h        | ✖   | c macros can't be done in zig.    |
+|em_math.h          | -    |                                  |
 |em_types.h         | ✔️   |                                  |
 |eventloop.h        | ✔️   |                                  |
-|exports.h          | ✖    |                                  |
+|exports.h          | -    |                                  |
 |fetch.h            | 🛠️   |                                  |
-|fiber.h            | ✖    |                                  |
+|fiber.h            | -    |                                  |
 |heap.h             | ✔️   |                                  |
-|html5.h            | 🛠️   | Externs rewritten. Missing zig-ified names.                                  |
-|html5_webgl.h      | ✖    |                                  |
-|html5_webgpu.h     | -    | Nothing useful in this header     |
-|key_codes.h        | ✖    |                                  |
-|posix_socket.h     | ✖    |                                  |
-|proxying.h         | ✖    |                                  |
-|stack.h            | ✖    |                                  |
-|threading.h        | ✖    |                                  |
-|trace.h            | ✖    |                                  |
-|val.h              | ✖    |                                  |
-|version.h          | ✖    |                                  |
-|wasmfs.h           | ✖    |                                  |
-|wasm_worker        | ✖    |                                  |
-|websocket.h        | ✖    |                                  |
-|wget.h             | ✖    |                                  |
-|wire.h             | ✖    |                                  |
+|html5.h            | ✔️   | could have bugs. missing shortcuts functions.                 |
+|html5_webgl.h      | -    |                                  |
+|html5_webgpu.h     | ✖    | Nothing useful in this header     |
+|key_codes.h        | -    |                                  |
+|posix_socket.h     | -    |                                  |
+|proxying.h         | -    |                                  |
+|stack.h            | -    |                                  |
+|threading.h        | -    |                                  |
+|trace.h            | -    |                                  |
+|val.h              | -    |                                  |
+|wasmfs.h           | -    |                                  |
+|wasm_worker        | -    |                                  |
+|websocket.h        | -    |                                  |
+|wget.h             | -    |                                  |
+|wire.h             | -    |                                  |
 
 # Zig specific bindings
 

@@ -86,17 +86,17 @@ const LONG_STRING_LEN_BYTES = 128; // EM_HTML5_LONG_STRING_LEN_BYTES
 const KeyboardEvent = extern struct {
     timestamp: u64,
     location: u32,
-    ctrlKey: EmBool,
-    shiftKey: EmBool,
-    altKey: EmBool,
-    metaKey: EmBool,
+    ctrl_key: EmBool,
+    shift_key: EmBool,
+    alt_key: EmBool,
+    meta_key: EmBool,
     repeat: EmBool,
-    charCode: u32,
-    keyCode: u32,
+    char_code: u32,
+    key_code: u32,
     which: u32,
     key: [SHORT_STRING_LEN_BYTES]u8,
     code: [SHORT_STRING_LEN_BYTES]u8,
-    charValue: [SHORT_STRING_LEN_BYTES]u8,
+    char_value: [SHORT_STRING_LEN_BYTES]u8,
     locale: [SHORT_STRING_LEN_BYTES]u8,
 };
 
@@ -110,20 +110,20 @@ extern fn emscripten_set_keyup_callback_on_thread(target: [*:0]const u8, user_da
 
 pub const MouseEvent = extern struct {
     timestamp: f64,
-    screenX: i32,
-    screenY: i32,
-    clientX: i32,
-    clientY: i32,
-    ctrlKey: EmBool,
-    shiftKey: EmBool,
-    altKey: EmBool,
-    metaKey: EmBool,
+    screen_x: i32,
+    screen_y: i32,
+    client_x: i32,
+    client_y: i32,
+    ctrl_key: EmBool,
+    shift_key: EmBool,
+    alt_key: EmBool,
+    meta_key: EmBool,
     button: u16,
     buttons: u16,
-    movementX: i32,
-    movementY: i32,
-    targetX: i32,
-    targetY: i32,
+    movement_x: i32,
+    movement_y: i32,
+    target_x: i32,
+    target_y: i32,
     // canvasX and canvasY are deprecated - there no longer exists a Module['canvas'] object, so canvasX/Y are no longer reported (register a listener on canvas directly to get canvas coordinates, or translate manually)
     _dontuse_canvasX: i32,
     _dontuse_canvasY: i32,
@@ -159,36 +159,43 @@ pub const DOM_DELTA_PAGE = 0x02;
 
 pub const WheelEvent = extern struct {
     mouse: MouseEvent,
-    deltaX: f64,
-    deltaY: f64,
-    deltaZ: f64,
-    deltaMode: u32,
+    delta_x: f64,
+    delta_y: f64,
+    delta_z: f64,
+    delta_mode: u32,
 };
 
+pub const setWheelCallbackOnThread = emscripten_set_wheel_callback_on_thread;
 pub const WheelCallbackFunc = *const fn (event_type: i32, wheel_event: *const WheelEvent, user_data: ?*anyopaque) EmBool; // em_wheel_callback_func
 extern fn emscripten_set_wheel_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callbacl: WheelCallbackFunc, target_thread: pthread_t) Result;
 
 pub const UiEvent = struct {
     detail: i64,
-    documentBodyClientWidth: i32,
-    documentBodyClientHeight: i32,
-    windowInnerWidth: i32,
-    windowInnerHeight: i32,
-    windowOuterWidth: i32,
-    windowOuterHeight: i32,
-    scrollTop: i32,
-    scrollLeft: i32,
+    document_body_client_width: i32,
+    document_body_client_height: i32,
+    window_inner_width: i32,
+    window_inner_height: i32,
+    window_outer_width: i32,
+    window_outer_height: i32,
+    scroll_top: i32,
+    scroll_left: i32,
 };
 
+pub const setResizeCallbackOnThread = emscripten_set_resize_callback_on_thread;
+pub const setScrollCallbackOnThread = emscripten_set_scroll_callback_on_thread;
 pub const UiCallbackFunc = *const fn (event_type: i32, event: *const UiEvent, user_data: ?*anyopaque) EmBool; // em_ui_callback_func
 extern fn emscripten_set_resize_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: UiCallbackFunc, target_thread: pthread_t) Result;
 extern fn emscripten_set_scroll_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: UiCallbackFunc, target_thread: pthread_t) Result;
 
 pub const FocusEvent = extern struct {
-    nodeName: [LONG_STRING_LEN_BYTES]u8,
+    node_name: [LONG_STRING_LEN_BYTES]u8,
     id: [LONG_STRING_LEN_BYTES]u8,
 };
 
+pub const setBlurCallbackOnThread = emscripten_set_blur_callback_on_thread;
+pub const setFocusCallbackOnThread = emscripten_set_focus_callback_on_thread;
+pub const setFocusInCallbackOnThread = emscripten_set_focusin_callback_on_thread;
+pub const setFocusOutCallbackOnThread = emscripten_set_focusout_callback_on_thread;
 pub const FocusCallbackFunc = *const fn (event_type: i32, event: *const FocusEvent, user_data: ?*anyopaque) EmBool; // em_focus_callback_func
 extern fn emscripten_set_blur_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: FocusCallbackFunc, target_thread: pthread_t) Result;
 extern fn emscripten_set_focus_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: FocusCallbackFunc, target_thread: pthread_t) Result;
@@ -202,28 +209,31 @@ pub const DeviceOrientationEvent = extern struct {
     absolute: EmBool,
 };
 
+pub const setDeviceOrientationCallbackOnThread = emscripten_set_deviceorientation_callback_on_thread;
+pub const getDeviceOrientationStatus = emscripten_get_deviceorientation_status;
 pub const DeviceOrientationCallbackFunc = *const fn (event_type: i32, event: *const FocusEvent, user_data: ?*anyopaque) EmBool; // em_deviceorientation_callback_func
 extern fn emscripten_set_deviceorientation_callback_on_thread(user_data: *anyopaque, use_capture: EmBool, callback: DeviceOrientationCallbackFunc, target_thread: pthread_t) Result;
-
 extern fn emscripten_get_deviceorientation_status(orientationState: DeviceOrientationEvent) Result;
 
-const DEVICE_MOTION_EVENT_SUPPORTS_ACCELERATION = 0x01;
-const DEVICE_MOTION_EVENT_SUPPORTS_ACCELERATION_INCLUDING_GRAVITY = 0x02;
-const DEVICE_MOTION_EVENT_SUPPORTS_ROTATION_RATE = 0x04;
+pub const DEVICE_MOTION_EVENT_SUPPORTS_ACCELERATION = 0x01;
+pub const DEVICE_MOTION_EVENT_SUPPORTS_ACCELERATION_INCLUDING_GRAVITY = 0x02;
+pub const DEVICE_MOTION_EVENT_SUPPORTS_ROTATION_RATE = 0x04;
 
 const DeviceMotionEvent = extern struct {
-    accelerationX: f64,
-    accelerationY: f64,
-    accelerationZ: f64,
-    accelerationIncludingGravityX: f64,
-    accelerationIncludingGravityY: f64,
-    accelerationIncludingGravityZ: f64,
-    rotationRateAlpha: f64,
-    rotationRateBeta: f64,
-    rotationRateGamma: f64,
-    supportedFields: i32,
+    acceleration_x: f64,
+    acceleration_y: f64,
+    acceleration_z: f64,
+    acceleration_including_gravity_x: f64,
+    acceleration_including_gravity_y: f64,
+    acceleration_including_gravity_z: f64,
+    rotation_rate_alpha: f64,
+    rotation_rate_beta: f64,
+    rotation_rate_gamma: f64,
+    supported_dields: i32,
 };
 
+pub const setDeviceMotionCallback = emscripten_set_devicemotion_callback_on_thread;
+pub const getDeviceMotionStatus = emscripten_get_devicemotion_status;
 pub const DeviceMotionCallbackFunc = *const fn (event_type: i32, event: *const DeviceMotionEvent, user_data: ?*anyopaque) EmBool; // em_devicemotion_callback_func
 extern fn emscripten_set_devicemotion_callback_on_thread(user_data: *anyopaque, use_capture: EmBool, callback: DeviceMotionCallbackFunc, target_thread: pthread_t) Result;
 extern fn emscripten_get_devicemotion_status(motionState: *DeviceMotionEvent) Result;
@@ -234,10 +244,14 @@ pub const ORIENTATION_LANDSCAPE_PRIMARY = 4; // EMSCRIPTEN_ORIENTATION_LANDSCAPE
 pub const ORIENTATION_LANDSCAPE_SECONDARY = 8; // EMSCRIPTEN_ORIENTATION_LANDSCAPE_SECONDARY
 
 pub const OrientationChangeEvent = extern struct {
-    orientationIndex: i32,
-    orientationAngle: i32,
+    orientation_index: i32,
+    orientation_angle: i32,
 };
 
+pub const setOrientationChangeCallback = emscripten_set_orientationchange_callback_on_thread;
+pub const getOrientationStatus = emscripten_get_orientation_status;
+pub const unlockOrientation = emscripten_lock_orientation;
+pub const lockOrientation = emscripten_unlock_orientation;
 pub const OrientationChangeCallbackFunc = *const fn (event_type: i32, event: *const OrientationChangeEvent, user_data: ?*anyopaque) EmBool; // em_orientationchange_callback_func
 extern fn emscripten_set_orientationchange_callback_on_thread(user_data: *anyopaque, use_capture: EmBool, callback: OrientationChangeCallbackFunc, target_thread: pthread_t) Result;
 extern fn emscripten_get_orientation_status(orientationStatus: *OrientationChangeEvent) Result;
@@ -245,16 +259,18 @@ extern fn emscripten_lock_orientation(allowedOrientations: i32) Result;
 extern fn emscripten_unlock_orientation(void) Result;
 
 pub const FullscreenChangeEvent = struct {
-    isFullscreen: EmBool,
-    fullscreenEnabled: EmBool,
-    nodeName: [LONG_STRING_LEN_BYTES]u8,
+    is_fullscreen: EmBool,
+    fullscreen_enabled: EmBool,
+    node_name: [LONG_STRING_LEN_BYTES]u8,
     id: [LONG_STRING_LEN_BYTES]u8,
-    elementWidth: i32,
-    elementHeight: i32,
-    screenWidth: i32,
-    screenHeight: i32,
+    element_width: i32,
+    element_height: i32,
+    screen_width: i32,
+    screen_height: i32,
 };
 
+pub const setFullscreenChangeCallbackOnThread = emscripten_set_fullscreenchange_callback_on_thread;
+pub const getFullscreenStatus = emscripten_get_fullscreen_status;
 pub const FullscreenChangeCallbackFunc = *const fn (event_type: i32, event: *const FullscreenChangeEvent, user_data: ?*anyopaque) EmBool; // em_fullscreenchange_callback_func
 extern fn emscripten_set_fullscreenchange_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: FullscreenChangeCallbackFunc, target_thread: pthread_t) Result;
 extern fn emscripten_get_fullscreen_status(fullscreenStatus: *FullscreenChangeEvent) Result;
@@ -280,39 +296,43 @@ pub const FullscreenFiltering = enum(i32) {
 pub const CanvasResizedCallback = *const fn (event_type: i32, reserved: ?*anyopaque, user_data: *anyopaque) EmBool;
 
 pub const FullscreenStrategy = extern struct {
-    scaleMode: FullscreenScale,
-    canvasResolutionScaleMode: FullscreenCanvasScale,
-    filteringMode: FullscreenFiltering,
-    canvasResizedCallback: CanvasResizedCallback,
-    canvasResizedCallbackUserData: ?*anyopaque,
-    canvasResizedCallbackTargetThread: pthread_t,
+    scale_mode: FullscreenScale,
+    canvas_resolution_scale_mode: FullscreenCanvasScale,
+    filtering_mode: FullscreenFiltering,
+    canvas_resized_callback: CanvasResizedCallback,
+    canvas_resized_callback_user_data: ?*anyopaque,
+    canvas_resized_callback_target_thread: pthread_t,
 };
 
+
+pub const requestFullscreen = emscripten_request_fullscreen;
+pub const requestFullscreenStrategy = emscripten_request_fullscreen_strategy;
+pub const exitFullscreen = emscripten_exit_fullscreen;
+pub const enterSoftFullscreen = emscripten_enter_soft_fullscreen;
+pub const exitSoftFullscreen = emscripten_exit_soft_fullscreen;
 extern fn emscripten_request_fullscreen(target: [*:0]const u8, deferUntilInEventHandler: EmBool) Result;
 extern fn emscripten_request_fullscreen_strategy(target: [*:0]const u8, deferUntilInEventHandler: EmBool, fullscreenStrategy: *const FullscreenStrategy) Result;
-
 extern fn emscripten_exit_fullscreen(void) Result;
-
 extern fn emscripten_enter_soft_fullscreen(target: [*:0]const u8, fullscreenStrategy: *const FullscreenStrategy) Result;
-
 extern fn emscripten_exit_soft_fullscreen(void) Result;
 
 const PointerlockChangeEvent = extern struct {
-    isActive: EmBool,
-    nodeName: [LONG_STRING_LEN_BYTES]u8,
+    is_active: EmBool,
+    node_name: [LONG_STRING_LEN_BYTES]u8,
     id: [LONG_STRING_LEN_BYTES]u8,
 };
 
+pub const setPointerlockChangeCallbackOnThread = emscripten_set_pointerlockchange_callback_on_thread;
+pub const setPointerlockErrorCallbackOnThread = emscripten_set_pointerlockerror_callback_on_thread;
+pub const getPointerlockStatus = emscripten_get_pointerlock_status;
+pub const requestPointerlock = emscripten_request_pointerlock;
+pub const exitPointerlock = emscripten_exit_pointerlock;
 pub const PointerlockChangeCallbackFunc = *const fn (event_type: i32, event: *const PointerlockChangeEvent, user_data: ?*anyopaque) EmBool; // em_pointerlockchange_callback_func
 extern fn emscripten_set_pointerlockchange_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: PointerlockChangeCallbackFunc, target_thread: pthread_t) Result;
-
 pub const PointerlockErrorCallbackFunc = *const fn (event_type: i32, reserved: *const anyopaque, user_data: ?*anyopaque) EmBool; // em_pointerlockerror_callback_func
 extern fn emscripten_set_pointerlockerror_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: PointerlockErrorCallbackFunc, target_thread: pthread_t) Result;
-
 extern fn emscripten_get_pointerlock_status(pointerlockStatus: *PointerlockChangeEvent) Result;
-
 extern fn emscripten_request_pointerlock(target: [*:0]const u8, deferUntilInEventHandler: EmBool) Result;
-
 extern fn emscripten_exit_pointerlock(void) Result;
 
 pub const EMSCRIPTEN_VISIBILITY_HIDDEN = 0;
@@ -322,25 +342,27 @@ pub const EMSCRIPTEN_VISIBILITY_UNLOADED = 3;
 
 pub const VisibilityChangeEvent = extern struct {
     hidden: EmBool,
-    visibilityState: i32,
+    visibility_state: i32,
 };
 
+pub const setVisibilityChangeCallbackOnThread = emscripten_set_visibilitychange_callback_on_thread;
+pub const getVisibilityStatus = emscripten_get_visibility_status;
 pub const VisibilityChangeCallbackFunc = *const fn (event_type: i32, event: *const VisibilityChangeEvent, user_data: ?*anyopaque) EmBool; // em_visibilitychange_callback_func
 extern fn emscripten_set_visibilitychange_callback_on_thread(user_data: *anyopaque, use_capture: EmBool, callback: VisibilityChangeCallbackFunc, target_thread: pthread_t) Result;
 extern fn emscripten_get_visibility_status(visibilityStatus: *VisibilityChangeEvent) Result;
 
 pub const TouchPoint = extern struct {
     identifier: c_long,
-    screenX: c_long,
-    screenY: c_long,
-    clientX: c_long,
-    clientY: c_long,
-    pageX: c_long,
-    pageY: c_long,
-    isChanged: EmBool,
-    onTarget: EmBool,
-    targetX: c_long,
-    targetY: c_long,
+    screen_x: c_long,
+    screen_y: c_long,
+    client_x: c_long,
+    client_y: c_long,
+    page_x: c_long,
+    page_y: c_long,
+    is_changed: EmBool,
+    on_target: EmBool,
+    target_x: c_long,
+    target_y: c_long,
     // canvasX and canvasY are deprecated - there no longer exists a Module['canvas'] object, so canvasX/Y are no longer reported (register a listener on canvas directly to get canvas coordinates, or translate manually)
     _dontuse_canvasX: c_long,
     _dontuse_canvasY: c_long,
@@ -348,11 +370,11 @@ pub const TouchPoint = extern struct {
 
 pub const TouchEvent = extern struct {
     timestamp: f64,
-    numTouches: i32,
-    ctrlKey: EmBool,
-    shiftKey: EmBool,
-    altKey: EmBool,
-    metaKey: EmBool,
+    num_touches: i32,
+    ctrl_key: EmBool,
+    shift_key: EmBool,
+    alt_key: EmBool,
+    meta_key: EmBool,
     touches: [32]TouchPoint,
 };
 
@@ -364,58 +386,73 @@ extern fn emscripten_set_touchcancel_callback_on_thread(target: [*:0]const u8, u
 
 pub const GamepadEvent = extern struct {
     timestamp: f64,
-    numAxes: i32,
-    numButtons: i32,
+    num_axes: i32,
+    num_buttons: i32,
     axis: [64]f64,
-    analogButton: [64]f64,
-    digitalButton: [64]EmBool,
+    analog_button: [64]f64,
+    digital_button: [64]EmBool,
     connected: EmBool,
     index: c_long,
     id: [MEDIUM_STRING_LEN_BYTES]u8,
     mapping: [MEDIUM_STRING_LEN_BYTES]u8,
 };
 
+pub const setGamepadConnectedCallbackOnThread = emscripten_set_gamepadconnected_callback_on_thread;
+pub const setGamepadDisconnectedCallbackOnThread = emscripten_set_gamepaddisconnected_callback_on_thread;
+pub const sampleGamepadData = emscripten_sample_gamepad_data;
+pub const getNumGamepads = emscripten_get_num_gamepads;
+pub const getGamepadStatus = emscripten_get_gamepad_status;
 pub const GamepadCallbackFunc = *const fn (event_type: i32, event: *const GamepadEvent, user_data: ?*anyopaque) EmBool; // em_gamepad_callback_func
 extern fn emscripten_set_gamepadconnected_callback_on_thread(user_data: *anyopaque, use_capture: EmBool, callback: GamepadCallbackFunc, target_thread: pthread_t) Result;
 extern fn emscripten_set_gamepaddisconnected_callback_on_thread(user_data: *anyopaque, use_capture: EmBool, callback: GamepadCallbackFunc, target_thread: pthread_t) Result;
-
 extern fn emscripten_sample_gamepad_data(void) Result;
 extern fn emscripten_get_num_gamepads(void) c_int;
 extern fn emscripten_get_gamepad_status(index: i32, gamepadState: *GamepadEvent) Result;
 
 pub const BatteryEvent = extern struct {
-    chargingTime: f64,
-    dischargingTime: f64,
+    charging_time: f64,
+    discharging_time: f64,
     level: f64,
     charging: EmBool,
 };
 
+pub const setBatteryChargingChangeCallbackOnThread = emscripten_set_batterychargingchange_callback_on_thread;
+pub const setBatteryLevelChangeCallbackOnThread = emscripten_set_batterylevelchange_callback_on_thread;
+pub const getBatteryStatus = emscripten_get_battery_status;
 pub const BatteryCallbackFunc = *const fn (event_type: i32, event: *const BatteryEvent, user_data: ?*anyopaque) EmBool; // em_battery_callback_func
 extern fn emscripten_set_batterychargingchange_callback_on_thread(user_data: *anyopaque, callback: BatteryCallbackFunc, target_thread: pthread_t) Result;
 extern fn emscripten_set_batterylevelchange_callback_on_thread(user_data: *anyopaque, callback: BatteryCallbackFunc, target_thread: pthread_t) Result;
-
 extern fn emscripten_get_battery_status(batteryState: BatteryEvent) Result;
 
+pub const vibrate = emscripten_vibrate;
+pub const vibratePattern = emscripten_vibrate_pattern;
 extern fn emscripten_vibrate(msecs: i32) Result;
 extern fn emscripten_vibrate_pattern(msecsArray: [*]i32, numEntries: i32) Result;
 
+pub const setBeforeUnloadCallbackOnThread = emscripten_set_beforeunload_callback_on_thread;
 pub const BeforeUnloadCallback = *const fn (event_type: i32, event: ?*const anyopaque, user_data: ?*anyopaque) ?[*]const u8; // em_beforeunload_callback
 extern fn emscripten_set_beforeunload_callback_on_thread(user_data: *anyopaque, callback: BeforeUnloadCallback, target_thread: pthread_t) Result;
 
 // Sets the canvas.width & canvas.height properties.
+pub const setCanvasElementSize = emscripten_set_canvas_element_size; 
 extern fn emscripten_set_canvas_element_size(target: [*:0]const u8, width: i32, height: i32) Result;
 
 // Returns the canvas.width & canvas.height properties.
+pub const getCanvasElementSize = emscripten_get_canvas_element_size; 
 extern fn emscripten_get_canvas_element_size(target: [*:0]const u8, width: *i32, height: *i32) Result;
 
+pub const setElementCssSize = emscripten_set_element_css_size; 
+pub const getElementCssSize = emscripten_get_element_css_size; 
 extern fn emscripten_set_element_css_size(target: [*:0]const u8, width: f64, height: f64) Result;
 extern fn emscripten_get_element_css_size(target: [*:0]const u8, width: *f64, height: *f64) Result;
 
+pub const html5RemoveAllEventListeners = emscripten_html5_remove_all_event_listeners; 
 extern fn emscripten_html5_remove_all_event_listeners(void) void;
 
 pub const EM_CALLBACK_THREAD_CONTEXT_MAIN_BROWSER_THREAD = pthread_t{(0x1)}; // ((pthread_t)0x1)
 pub const EM_CALLBACK_THREAD_CONTEXT_CALLING_THREAD = pthread_t{(0x2)}; // ((pthread_t)0x2)
 
+// Forwardings
 // #define emscripten_set_keypress_callback(target, userData, useCapture, callback)              emscripten_set_keypress_callback_on_thread(             (target), (userData), (useCapture), (callback), EM_CALLBACK_THREAD_CONTEXT_CALLING_THREAD)
 // #define emscripten_set_keydown_callback(target, userData, useCapture, callback)               emscripten_set_keydown_callback_on_thread(              (target), (userData), (useCapture), (callback), EM_CALLBACK_THREAD_CONTEXT_CALLING_THREAD)
 // #define emscripten_set_keyup_callback(target, userData, useCapture, callback)                 emscripten_set_keyup_callback_on_thread(                (target), (userData), (useCapture), (callback), EM_CALLBACK_THREAD_CONTEXT_CALLING_THREAD)
