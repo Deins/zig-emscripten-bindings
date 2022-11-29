@@ -104,9 +104,9 @@ pub const KeyCallbackFunc = *const fn (event_type: i32, mouse_event: *const Keyb
 pub const setKeyPressCallbackOnThread = emscripten_set_keypress_callback_on_thread;
 pub const setKeyDownCallbackOnThread = emscripten_set_keydown_callback_on_thread;
 pub const setKeyUpCallbackOnThread = emscripten_set_keyup_callback_on_thread;
-extern fn emscripten_set_keypress_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: KeyCallbackFunc, target_thread: pthread_t) Result;
-extern fn emscripten_set_keydown_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: KeyCallbackFunc, target_thread: pthread_t) Result;
-extern fn emscripten_set_keyup_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: KeyCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_keypress_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callback: KeyCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_keydown_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callback: KeyCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_keyup_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callback: KeyCallbackFunc, target_thread: pthread_t) Result;
 
 pub const MouseEvent = extern struct {
     timestamp: f64,
@@ -140,15 +140,15 @@ pub const setMouseenterCallbackOnThread = emscripten_set_mouseenter_callback_on_
 pub const setMouseleaveCallbackOnThread = emscripten_set_mouseleave_callback_on_thread;
 pub const setMouseoverCallbackOnThread = emscripten_set_mouseover_callback_on_thread;
 pub const setMouseoutCallbackOnThread = emscripten_set_mouseout_callback_on_thread;
-extern fn emscripten_set_click_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: MouseCallbackFunc, target_thread: pthread_t) Result;
-extern fn emscripten_set_mousedown_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: MouseCallbackFunc, target_thread: pthread_t) Result;
-extern fn emscripten_set_mouseup_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: MouseCallbackFunc, target_thread: pthread_t) Result;
-extern fn emscripten_set_dblclick_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: MouseCallbackFunc, target_thread: pthread_t) Result;
-extern fn emscripten_set_mousemove_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: MouseCallbackFunc, target_thread: pthread_t) Result;
-extern fn emscripten_set_mouseenter_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: MouseCallbackFunc, target_thread: pthread_t) Result;
-extern fn emscripten_set_mouseleave_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: MouseCallbackFunc, target_thread: pthread_t) Result;
-extern fn emscripten_set_mouseover_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: MouseCallbackFunc, target_thread: pthread_t) Result;
-extern fn emscripten_set_mouseout_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: MouseCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_click_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callback: MouseCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_mousedown_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callback: MouseCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_mouseup_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callback: MouseCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_dblclick_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callback: MouseCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_mousemove_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callback: MouseCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_mouseenter_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callback: MouseCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_mouseleave_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callback: MouseCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_mouseover_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callback: MouseCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_mouseout_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callback: MouseCallbackFunc, target_thread: pthread_t) Result;
 
 pub const getMouseStatus = emscripten_get_mouse_status;
 extern fn emscripten_get_mouse_status(mouseState: MouseEvent) Result;
@@ -167,7 +167,7 @@ pub const WheelEvent = extern struct {
 
 pub const setWheelCallbackOnThread = emscripten_set_wheel_callback_on_thread;
 pub const WheelCallbackFunc = *const fn (event_type: i32, wheel_event: *const WheelEvent, user_data: ?*anyopaque) EmBool; // em_wheel_callback_func
-extern fn emscripten_set_wheel_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callbacl: WheelCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_wheel_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callbacl: WheelCallbackFunc, target_thread: pthread_t) Result;
 
 pub const UiEvent = struct {
     detail: i64,
@@ -184,8 +184,8 @@ pub const UiEvent = struct {
 pub const setResizeCallbackOnThread = emscripten_set_resize_callback_on_thread;
 pub const setScrollCallbackOnThread = emscripten_set_scroll_callback_on_thread;
 pub const UiCallbackFunc = *const fn (event_type: i32, event: *const UiEvent, user_data: ?*anyopaque) EmBool; // em_ui_callback_func
-extern fn emscripten_set_resize_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: UiCallbackFunc, target_thread: pthread_t) Result;
-extern fn emscripten_set_scroll_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: UiCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_resize_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callback: UiCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_scroll_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callback: UiCallbackFunc, target_thread: pthread_t) Result;
 
 pub const FocusEvent = extern struct {
     node_name: [LONG_STRING_LEN_BYTES]u8,
@@ -197,10 +197,10 @@ pub const setFocusCallbackOnThread = emscripten_set_focus_callback_on_thread;
 pub const setFocusInCallbackOnThread = emscripten_set_focusin_callback_on_thread;
 pub const setFocusOutCallbackOnThread = emscripten_set_focusout_callback_on_thread;
 pub const FocusCallbackFunc = *const fn (event_type: i32, event: *const FocusEvent, user_data: ?*anyopaque) EmBool; // em_focus_callback_func
-extern fn emscripten_set_blur_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: FocusCallbackFunc, target_thread: pthread_t) Result;
-extern fn emscripten_set_focus_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: FocusCallbackFunc, target_thread: pthread_t) Result;
-extern fn emscripten_set_focusin_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: FocusCallbackFunc, target_thread: pthread_t) Result;
-extern fn emscripten_set_focusout_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: FocusCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_blur_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callback: FocusCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_focus_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callback: FocusCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_focusin_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callback: FocusCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_focusout_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callback: FocusCallbackFunc, target_thread: pthread_t) Result;
 
 pub const DeviceOrientationEvent = extern struct {
     alpha: f64,
@@ -212,7 +212,7 @@ pub const DeviceOrientationEvent = extern struct {
 pub const setDeviceOrientationCallbackOnThread = emscripten_set_deviceorientation_callback_on_thread;
 pub const getDeviceOrientationStatus = emscripten_get_deviceorientation_status;
 pub const DeviceOrientationCallbackFunc = *const fn (event_type: i32, event: *const FocusEvent, user_data: ?*anyopaque) EmBool; // em_deviceorientation_callback_func
-extern fn emscripten_set_deviceorientation_callback_on_thread(user_data: *anyopaque, use_capture: EmBool, callback: DeviceOrientationCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_deviceorientation_callback_on_thread(user_data: ?*anyopaque, use_capture: EmBool, callback: DeviceOrientationCallbackFunc, target_thread: pthread_t) Result;
 extern fn emscripten_get_deviceorientation_status(orientationState: DeviceOrientationEvent) Result;
 
 pub const DEVICE_MOTION_EVENT_SUPPORTS_ACCELERATION = 0x01;
@@ -235,7 +235,7 @@ const DeviceMotionEvent = extern struct {
 pub const setDeviceMotionCallback = emscripten_set_devicemotion_callback_on_thread;
 pub const getDeviceMotionStatus = emscripten_get_devicemotion_status;
 pub const DeviceMotionCallbackFunc = *const fn (event_type: i32, event: *const DeviceMotionEvent, user_data: ?*anyopaque) EmBool; // em_devicemotion_callback_func
-extern fn emscripten_set_devicemotion_callback_on_thread(user_data: *anyopaque, use_capture: EmBool, callback: DeviceMotionCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_devicemotion_callback_on_thread(user_data: ?*anyopaque, use_capture: EmBool, callback: DeviceMotionCallbackFunc, target_thread: pthread_t) Result;
 extern fn emscripten_get_devicemotion_status(motionState: *DeviceMotionEvent) Result;
 
 pub const ORIENTATION_PORTRAIT_PRIMARY = 1; // EMSCRIPTEN_ORIENTATION_PORTRAIT_PRIMARY
@@ -253,7 +253,7 @@ pub const getOrientationStatus = emscripten_get_orientation_status;
 pub const unlockOrientation = emscripten_lock_orientation;
 pub const lockOrientation = emscripten_unlock_orientation;
 pub const OrientationChangeCallbackFunc = *const fn (event_type: i32, event: *const OrientationChangeEvent, user_data: ?*anyopaque) EmBool; // em_orientationchange_callback_func
-extern fn emscripten_set_orientationchange_callback_on_thread(user_data: *anyopaque, use_capture: EmBool, callback: OrientationChangeCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_orientationchange_callback_on_thread(user_data: ?*anyopaque, use_capture: EmBool, callback: OrientationChangeCallbackFunc, target_thread: pthread_t) Result;
 extern fn emscripten_get_orientation_status(orientationStatus: *OrientationChangeEvent) Result;
 extern fn emscripten_lock_orientation(allowedOrientations: i32) Result;
 extern fn emscripten_unlock_orientation(void) Result;
@@ -272,7 +272,7 @@ pub const FullscreenChangeEvent = struct {
 pub const setFullscreenChangeCallbackOnThread = emscripten_set_fullscreenchange_callback_on_thread;
 pub const getFullscreenStatus = emscripten_get_fullscreen_status;
 pub const FullscreenChangeCallbackFunc = *const fn (event_type: i32, event: *const FullscreenChangeEvent, user_data: ?*anyopaque) EmBool; // em_fullscreenchange_callback_func
-extern fn emscripten_set_fullscreenchange_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: FullscreenChangeCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_fullscreenchange_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callback: FullscreenChangeCallbackFunc, target_thread: pthread_t) Result;
 extern fn emscripten_get_fullscreen_status(fullscreenStatus: *FullscreenChangeEvent) Result;
 
 pub const FullscreenScale = enum(i32) {
@@ -293,7 +293,7 @@ pub const FullscreenFiltering = enum(i32) {
     nearest = 1, // EMSCRIPTEN_FULLSCREEN_FILTERING_NEAREST
     bilinear = 2, // EMSCRIPTEN_FULLSCREEN_FILTERING_BILINEAR
 };
-pub const CanvasResizedCallback = *const fn (event_type: i32, reserved: ?*anyopaque, user_data: *anyopaque) EmBool;
+pub const CanvasResizedCallback = *const fn (event_type: i32, reserved: ?*anyopaque, user_data: ?*anyopaque) EmBool;
 
 pub const FullscreenStrategy = extern struct {
     scale_mode: FullscreenScale,
@@ -328,9 +328,9 @@ pub const getPointerlockStatus = emscripten_get_pointerlock_status;
 pub const requestPointerlock = emscripten_request_pointerlock;
 pub const exitPointerlock = emscripten_exit_pointerlock;
 pub const PointerlockChangeCallbackFunc = *const fn (event_type: i32, event: *const PointerlockChangeEvent, user_data: ?*anyopaque) EmBool; // em_pointerlockchange_callback_func
-extern fn emscripten_set_pointerlockchange_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: PointerlockChangeCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_pointerlockchange_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callback: PointerlockChangeCallbackFunc, target_thread: pthread_t) Result;
 pub const PointerlockErrorCallbackFunc = *const fn (event_type: i32, reserved: *const anyopaque, user_data: ?*anyopaque) EmBool; // em_pointerlockerror_callback_func
-extern fn emscripten_set_pointerlockerror_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, callback: PointerlockErrorCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_pointerlockerror_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, callback: PointerlockErrorCallbackFunc, target_thread: pthread_t) Result;
 extern fn emscripten_get_pointerlock_status(pointerlockStatus: *PointerlockChangeEvent) Result;
 extern fn emscripten_request_pointerlock(target: [*:0]const u8, deferUntilInEventHandler: EmBool) Result;
 extern fn emscripten_exit_pointerlock(void) Result;
@@ -348,7 +348,7 @@ pub const VisibilityChangeEvent = extern struct {
 pub const setVisibilityChangeCallbackOnThread = emscripten_set_visibilitychange_callback_on_thread;
 pub const getVisibilityStatus = emscripten_get_visibility_status;
 pub const VisibilityChangeCallbackFunc = *const fn (event_type: i32, event: *const VisibilityChangeEvent, user_data: ?*anyopaque) EmBool; // em_visibilitychange_callback_func
-extern fn emscripten_set_visibilitychange_callback_on_thread(user_data: *anyopaque, use_capture: EmBool, callback: VisibilityChangeCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_visibilitychange_callback_on_thread(user_data: ?*anyopaque, use_capture: EmBool, callback: VisibilityChangeCallbackFunc, target_thread: pthread_t) Result;
 extern fn emscripten_get_visibility_status(visibilityStatus: *VisibilityChangeEvent) Result;
 
 pub const TouchPoint = extern struct {
@@ -379,10 +379,10 @@ pub const TouchEvent = extern struct {
 };
 
 pub const TouchCallbackFunc = *const fn (event_type: i32, event: *const TouchEvent, user_data: ?*anyopaque) EmBool; // em_touch_callback_func
-extern fn emscripten_set_touchstart_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, TouchCallbackFunc, target_thread: pthread_t) Result;
-extern fn emscripten_set_touchend_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, TouchCallbackFunc, target_thread: pthread_t) Result;
-extern fn emscripten_set_touchmove_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, TouchCallbackFunc, target_thread: pthread_t) Result;
-extern fn emscripten_set_touchcancel_callback_on_thread(target: [*:0]const u8, user_data: *anyopaque, use_capture: EmBool, TouchCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_touchstart_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, TouchCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_touchend_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, TouchCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_touchmove_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, TouchCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_touchcancel_callback_on_thread(target: [*:0]const u8, user_data: ?*anyopaque, use_capture: EmBool, TouchCallbackFunc, target_thread: pthread_t) Result;
 
 pub const GamepadEvent = extern struct {
     timestamp: f64,
@@ -403,8 +403,8 @@ pub const sampleGamepadData = emscripten_sample_gamepad_data;
 pub const getNumGamepads = emscripten_get_num_gamepads;
 pub const getGamepadStatus = emscripten_get_gamepad_status;
 pub const GamepadCallbackFunc = *const fn (event_type: i32, event: *const GamepadEvent, user_data: ?*anyopaque) EmBool; // em_gamepad_callback_func
-extern fn emscripten_set_gamepadconnected_callback_on_thread(user_data: *anyopaque, use_capture: EmBool, callback: GamepadCallbackFunc, target_thread: pthread_t) Result;
-extern fn emscripten_set_gamepaddisconnected_callback_on_thread(user_data: *anyopaque, use_capture: EmBool, callback: GamepadCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_gamepadconnected_callback_on_thread(user_data: ?*anyopaque, use_capture: EmBool, callback: GamepadCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_gamepaddisconnected_callback_on_thread(user_data: ?*anyopaque, use_capture: EmBool, callback: GamepadCallbackFunc, target_thread: pthread_t) Result;
 extern fn emscripten_sample_gamepad_data(void) Result;
 extern fn emscripten_get_num_gamepads(void) c_int;
 extern fn emscripten_get_gamepad_status(index: i32, gamepadState: *GamepadEvent) Result;
@@ -420,8 +420,8 @@ pub const setBatteryChargingChangeCallbackOnThread = emscripten_set_batterycharg
 pub const setBatteryLevelChangeCallbackOnThread = emscripten_set_batterylevelchange_callback_on_thread;
 pub const getBatteryStatus = emscripten_get_battery_status;
 pub const BatteryCallbackFunc = *const fn (event_type: i32, event: *const BatteryEvent, user_data: ?*anyopaque) EmBool; // em_battery_callback_func
-extern fn emscripten_set_batterychargingchange_callback_on_thread(user_data: *anyopaque, callback: BatteryCallbackFunc, target_thread: pthread_t) Result;
-extern fn emscripten_set_batterylevelchange_callback_on_thread(user_data: *anyopaque, callback: BatteryCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_batterychargingchange_callback_on_thread(user_data: ?*anyopaque, callback: BatteryCallbackFunc, target_thread: pthread_t) Result;
+extern fn emscripten_set_batterylevelchange_callback_on_thread(user_data: ?*anyopaque, callback: BatteryCallbackFunc, target_thread: pthread_t) Result;
 extern fn emscripten_get_battery_status(batteryState: BatteryEvent) Result;
 
 pub const vibrate = emscripten_vibrate;
@@ -431,7 +431,7 @@ extern fn emscripten_vibrate_pattern(msecsArray: [*]i32, numEntries: i32) Result
 
 pub const setBeforeUnloadCallbackOnThread = emscripten_set_beforeunload_callback_on_thread;
 pub const BeforeUnloadCallback = *const fn (event_type: i32, event: ?*const anyopaque, user_data: ?*anyopaque) ?[*]const u8; // em_beforeunload_callback
-extern fn emscripten_set_beforeunload_callback_on_thread(user_data: *anyopaque, callback: BeforeUnloadCallback, target_thread: pthread_t) Result;
+extern fn emscripten_set_beforeunload_callback_on_thread(user_data: ?*anyopaque, callback: BeforeUnloadCallback, target_thread: pthread_t) Result;
 
 // Sets the canvas.width & canvas.height properties.
 pub const setCanvasElementSize = emscripten_set_canvas_element_size; 
@@ -495,10 +495,10 @@ pub const requestAnimationFrameLoop = emscripten_request_animation_frame_loop;
 pub const dateNow = emscripten_date_now;
 pub const performanceNow = emscripten_performance_now;
 
-pub const AnimationFrameCallback = *const fn (time: f64, user_data: *anyopaque) EmBool;
-extern fn emscripten_request_animation_frame(cb: AnimationFrameCallback, user_data: *anyopaque) c_long;
+pub const AnimationFrameCallback = *const fn (time: f64, user_data: ?*anyopaque) EmBool;
+extern fn emscripten_request_animation_frame(cb: AnimationFrameCallback, user_data: ?*anyopaque) c_long;
 extern fn emscripten_cancel_animation_frame(requestAnimationFrameId: c_long) void;
-extern fn emscripten_request_animation_frame_loop(cb: AnimationFrameCallback, user_data: *anyopaque) void;
+extern fn emscripten_request_animation_frame_loop(cb: AnimationFrameCallback, user_data: ?*anyopaque) void;
 
-extern fn emscripten_date_now(void) f64;
-extern fn emscripten_performance_now(void) f64;
+extern fn emscripten_date_now() f64;
+extern fn emscripten_performance_now() f64;
