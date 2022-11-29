@@ -1,4 +1,5 @@
 pub const allocator = @import("src/allocator.zig");
+pub const time = @import("src/time.zig");
 
 pub usingnamespace  @import("src/emscripten/em_types.zig");
 pub const heap = @import("src/emscripten/heap.zig");

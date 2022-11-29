@@ -43,9 +43,10 @@ matching version: `emcc (Emscripten gcc/clang-like replacement + linker emulatin
 
 # Zig specific bindings
 
-* Allocators (file `src/allocator.zig`):
+* Allocators `src/allocator.zig`:
     * ✔️ BuiltinAllocator **(doesn't have realloc)**
     * ✔️ EmMalloc allocator
+* Timer `src/time.zig`
 
 ## Usage
 
