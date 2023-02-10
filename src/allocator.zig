@@ -6,7 +6,7 @@ const emheap = @import("emscripten/heap.zig");
 /// Works with with both dlmalloc and emmalloc.
 pub const BuiltinAllocator = struct {
     const Self = @This();
-    dummy : u32 = undefined,
+    dummy: u32 = undefined,
 
     pub fn allocator(self: *Self) std.mem.Allocator {
         return std.mem.Allocator.init(self, alloc, std.mem.Allocator.NoResize(Self).noResize, free);
@@ -43,13 +43,20 @@ pub const BuiltinAllocator = struct {
 /// use with linker flag -sMALLOC=emmalloc
 pub const EmmalocAllocator = struct {
     const Self = @This();
-    dummy : u32 = undefined,
+    dummy: u32 = undefined,
 
     pub fn allocator(self: *Self) std.mem.Allocator {
-        return std.mem.Allocator.init(self, alloc, resize, free);
+        return .{
+            .ptr = self,
+            .vtable = &.{
+                .alloc = &alloc,
+                .resize = &resize,
+                .free = &free,
+            },
+        };
     }
 
-    const emmalloc = @import ("emscripten/emmaloc.zig");
+    const emmalloc = @import("emscripten/emmaloc.zig");
     pub const dumpMemoryRegions = emmalloc.dumpMemoryRegions;
     pub const usableSize = emmalloc.usableSize;
     pub const realloc = emmalloc.realloc;
@@ -65,46 +72,40 @@ pub const EmmalocAllocator = struct {
     pub const computeFreeDynamicMemoryFragmentationMap = emmalloc.computeFreeDynamicMemoryFragmentationMap;
 
     fn alloc(
-        self: *Self,
+        ctx: *anyopaque,
         len: usize,
-        ptr_align: u29,
-        len_align: u29,
+        ptr_align_log2: u8,
         return_address: usize,
-    ) error{OutOfMemory}![]u8 {
-        _ = self;
+    ) ?[*]u8 {
+        _ = ctx;
         _ = return_address;
+        const ptr_align: u32 = @intCast(u32, 1) << @intCast(u5, ptr_align_log2);
         if (!std.math.isPowerOfTwo(ptr_align)) unreachable;
-        const ptr = emmalloc.memalign(ptr_align, len) orelse return error.OutOfMemory;
-        if (len_align == 0) return @ptrCast([*]u8, ptr)[0..len];
-        const full_len = usableSize(ptr);
-        return ptr[0..std.mem.alignBackwardAnyAlign(full_len, len_align)];
+        const ptr = emmalloc.memalign(ptr_align, len) orelse return null;
+        return @ptrCast([*]u8, ptr);
     }
 
     fn resize(
-        self: *Self,
+        ctx: *anyopaque,
         buf: []u8,
-        buf_align: u29,
+        buf_align_log2: u8,
         new_len: usize,
-        len_align: u29,
         return_address: usize,
-    ) ?usize {
-        _ = self;
-        _ = buf_align;
+    ) bool {
+        _ = ctx;
         _ = return_address;
-        const ptr = emmalloc.reallocTry(buf.ptr, new_len);
-        if (new_len > buf.len and ptr == null) return null;
-        if (len_align == 0) return new_len;
-        return std.mem.alignBackwardAnyAlign(usableSize(ptr), len_align);
+        _ = buf_align_log2;
+        return emmalloc.reallocTry(buf.ptr, new_len) != null;
     }
 
     fn free(
-        self: *Self,
+        ctx: *anyopaque,
         buf: []u8,
-        buf_align: u29,
+        buf_align_log2: u8,
         return_address: usize,
     ) void {
-        _ = self;
-        _ = buf_align;
+        _ = ctx;
+        _ = buf_align_log2;
         _ = return_address;
         return emmalloc.free(buf.ptr);
     }
